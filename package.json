@@ -112,6 +112,11 @@
     "workbox-window": "7.4.0",
     "worker-rpc": "0.2.0"
   },
+  "overrides": {
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    }
+  },
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
     "@eslint/js": "10.0.1",
