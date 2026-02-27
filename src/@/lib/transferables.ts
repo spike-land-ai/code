@@ -257,7 +257,7 @@ export async function isSupported(): Promise<{
     const streams = {
       readonly: new ReadableStream(),
       writeonly: new WritableStream(),
-      tranformonly: new TransformStream(),
+      transformonly: new TransformStream(),
     };
 
     const clonedObj = structuredCloneExists
@@ -265,7 +265,7 @@ export async function isSupported(): Promise<{
         transfer: [
           streams.readonly as unknown as Transferable,
           streams.writeonly as unknown as Transferable,
-          streams.tranformonly as unknown as Transferable,
+          streams.transformonly as unknown as Transferable,
         ],
       })
       : streams;
@@ -277,7 +277,7 @@ export async function isSupported(): Promise<{
         messageChannel.port1.postMessage(streams1, [
           streams1.readonly as unknown as Transferable,
           streams1.writeonly as unknown as Transferable,
-          streams1.tranformonly as unknown as Transferable,
+          streams1.transformonly as unknown as Transferable,
         ]);
         messageChannel.port1.onmessage = () => {
           resolve();
@@ -288,7 +288,7 @@ export async function isSupported(): Promise<{
             [
               data.readonly as unknown as Transferable,
               data.writeonly as unknown as Transferable,
-              data.tranformonly as unknown as Transferable,
+              data.transformonly as unknown as Transferable,
             ].filter(x => x !== undefined),
           );
         };
