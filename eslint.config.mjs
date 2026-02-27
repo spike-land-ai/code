@@ -1,2 +1,2 @@
-import { createReactConfig } from "@spike-land-ai/eslint-config/react";
+import { createReactConfig } from "../.github/packages/eslint-config/react.mjs";
 export default createReactConfig({ ignores: ["dist-vite/**", "dts/**"] });
