@@ -1,13 +1,13 @@
 import { importMap } from "@/lib/importmap-utils";
 import { tryCatch } from "@/lib/try-catch";
 import { Mutex } from "async-mutex";
-import type { BuildOptions } from "@spike-npm-land/esbuild-wasm";
+import type { BuildOptions } from "@spike-land-ai/esbuild-wasm";
 import {
   build as esmBuild,
   initialize,
   transform,
-} from "@spike-npm-land/esbuild-wasm";
-import type * as esbuild from "@spike-npm-land/esbuild-wasm";
+} from "@spike-land-ai/esbuild-wasm";
+import type * as esbuild from "@spike-land-ai/esbuild-wasm";
 import { wasmFile } from "../../esbuildWASM";
 import { fetchPlugin } from "./esbuild-fetch-plugin";
 import { makeEnv } from "./esbuild-make-env";

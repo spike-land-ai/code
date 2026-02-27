@@ -1,2 +1,2 @@
-import wasmUrl from "@spike-npm-land/esbuild-wasm/esbuild.wasm";
+import wasmUrl from "@spike-land-ai/esbuild-wasm/esbuild.wasm";
 export { wasmUrl as wasmFile };

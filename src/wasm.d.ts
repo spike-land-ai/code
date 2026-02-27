@@ -1,1 +1,1 @@
-declare module "@spike-npm-land/esbuild-wasm/esbuild.wasm";
+declare module "@spike-land-ai/esbuild-wasm/esbuild.wasm";

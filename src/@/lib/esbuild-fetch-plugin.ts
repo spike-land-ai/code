@@ -1,4 +1,4 @@
-import type { Loader, Plugin } from "@spike-npm-land/esbuild-wasm"; // Imported Loader
+import type { Loader, Plugin } from "@spike-land-ai/esbuild-wasm"; // Imported Loader
 import {
   DEPS_PARAM,
   EXTERNAL_DEPENDENCIES,
