@@ -1,6 +1,6 @@
 {
   "name": "@spike-land-ai/code",
-  "version": "0.9.57",
+  "version": "0.9.58",
   "type": "module",
   "description": "Frontend React application for the spike.land real-time collaborative code editor, featuring Monaco Editor, TypeScript, and live preview.",
   "entry": "dist/modules.mjs",
