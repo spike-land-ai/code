@@ -8,11 +8,21 @@
   "source": "src/modules.ts",
   "types": "dts/src/modules.d.ts",
   "module": "dist/modules.mjs",
+  "exports": {
+    ".": {
+      "types": "./dts/src/modules.d.ts",
+      "import": "./dist/modules.mjs",
+      "default": "./dist/modules.mjs"
+    }
+  },
   "files": [
     "dist",
     "src",
     "dts"
   ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail=false \"npm run dev:vite\" \"npm run types:watch\" \"npm run dev:workers\"",
     "dev:vite": "vite",
@@ -26,11 +36,13 @@
     "post-build-delete": "npm run remove-extraneous",
     "post-build": "cp -a -f dist-vite/. dist/  && npm run remove-extraneous",
     "remove-extraneous": "cd dist && (rm -f *.tsbuildinfo 2>/dev/null || true) && cd @/workers/monaco && (rm -f css.worker.js html.worker.js json.worker.js 2>/dev/null || true)",
+    "typecheck": "tsc --noEmit",
     "types:check": "tsc --noEmit",
     "types:build": "tsc --build",
     "types:watch": "tsc --watch",
     "types:cp": "cp -r dts/src/reactMod.d.ts dts/src/reactDom.d.ts dts/src/jsx.d.ts dts/src/emotion.d.ts dts/src/reactDomClient.d.ts dist/ && cp -r dts/src/@ dist/.",
     "test": "sh scripts/run-tests.sh",
+    "test:coverage": "vitest run --coverage",
     "test:full": "npm run types:check && npm run lint && npm run test",
     "clean": "rm -rf .tsBuildInfo dist dts dist-vite && mkdir -p dist dts dist-vite",
     "lint": "eslint .",
@@ -134,6 +146,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
     "@eslint/js": "10.0.1",
+    "@spike-land-ai/eslint-config": "^1.0.0",
     "@spike-land-ai/esbuild-wasm-mcp": "0.27.4",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
