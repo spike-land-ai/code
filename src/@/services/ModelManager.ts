@@ -28,14 +28,8 @@ export class ModelManager implements IModelManager {
       if (!codeSpaceLine) continue;
 
       const codeSpaceMatch = codeSpaceLine.match(/^([\w-.]+)\.tsx$/);
-      if (!codeSpaceMatch) continue;
       if (!codeSpaceMatch || !codeSpaceMatch[1]) continue;
       const codeSpace = codeSpaceMatch[1];
-
-      if (typeof codeSpace !== "string") { // Ensure codeSpace is a string
-        errors.push(`Invalid code space derived from line: ${codeSpaceLine}`);
-        continue;
-      }
 
       const codeContentMatch = lines.join("\n").match(
         /```tsx\s*([\s\S]*?)\s*```/m,
@@ -45,12 +39,8 @@ export class ModelManager implements IModelManager {
 
       let codeInstance = this.models.get(codeSpace);
       if (!codeInstance) {
-        if (typeof codeContent !== "string") { // Ensure codeContent is a string
-          errors.push(`Invalid code content for ${codeSpace}`);
-          continue;
-        }
         codeInstance = new Code({
-          codeSpace, // codeSpace is now guaranteed to be a string
+          codeSpace,
           code: codeContent,
           html: "",
           css: "",
@@ -58,14 +48,14 @@ export class ModelManager implements IModelManager {
           messages: [],
         });
         await codeInstance.init();
-        this.models.set(codeSpace, codeInstance); // codeSpace is now guaranteed to be a string
+        this.models.set(codeSpace, codeInstance);
       }
 
       const session = await codeInstance.getSession();
-      if (typeof codeContent === "string" && session.code !== codeContent) { // Ensure codeContent is a string
+      if (session.code !== codeContent) {
         const updatedCode = await codeInstance.setCode(
           codeContent + "\n\n\n",
-          codeSpace !== this.currentCodeSpace, // codeSpace is now guaranteed to be a string
+          codeSpace !== this.currentCodeSpace,
         );
         if (!updatedCode) {
           errors.push(`Failed to update code for ${codeSpace}`);

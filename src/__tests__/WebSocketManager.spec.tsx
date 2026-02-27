@@ -261,7 +261,7 @@ describe("WebSocketManager", () => {
         );
       }
 
-      expect(mockMessageHandler.handleMessage).toHaveBeenCalledWith(mockEvent);
+      expect(mockMessageHandler.handleMessage).toHaveBeenCalledWith(mockEvent.data);
     });
   });
 

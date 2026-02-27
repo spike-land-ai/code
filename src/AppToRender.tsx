@@ -103,7 +103,7 @@ export const AppToRender: FC<AppComponentProps> = memo(({
 
   // Chat toggle state
   const [isOpen, setIsOpen] = useState(
-    maybeKey && sessionStorage.getItem(maybeKey) ? true : false,
+    Boolean(maybeKey && sessionStorage.getItem(maybeKey)),
   );
 
   // History modal state

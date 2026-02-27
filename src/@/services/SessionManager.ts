@@ -37,11 +37,9 @@ export class SessionManager implements ISessionManager {
     this.session = await this.sessionSynchronizer.init(initialSession);
 
     if (this.session) {
-      const session = this.session!;
-
       this.releaseWorker = await connect({
-        signal: `${this.user} ${session.codeSpace}`,
-        sess: session,
+        signal: `${this.user} ${this.session.codeSpace}`,
+        sess: this.session,
       });
     }
     if (!this.session) {
@@ -109,7 +107,6 @@ export class SessionManager implements ISessionManager {
   }
 
   private broadcastSession(oldSession: ICodeSession): void {
-    console.warn("SessionManager Broadcasting session", this.session);
     if (!this.session) return;
 
     const diff = this.computeSessionDiff(oldSession, this.session);

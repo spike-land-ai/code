@@ -140,10 +140,6 @@ export class Code implements ICode {
     return initializedSession;
   }
 
-  computeSessionHash(session: ICodeSession): string {
-    return computeSessionHash(session);
-  }
-
   getCodeSpace(): string {
     return this.codeSpace;
   }

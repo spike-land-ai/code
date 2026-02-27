@@ -8,7 +8,6 @@ import {
 import type { Message } from "@/lib/interfaces";
 import { ROUTES } from "@/lib/routes";
 import { tryCatch } from "@/lib/try-catch";
-// import { init } from "@/lib/tw-dev-setup";
 import { WebSocketEventType, WebSocketState } from "./enums";
 import type {
   IWebSocketManager,
@@ -57,7 +56,7 @@ export class WebSocketManager implements IWebSocketManager {
    */
   public async init(): Promise<void> {
     const initPromise = async () => {
-      await this.initializeResources();
+      this.initializeResources();
       await this.setupRouteHandlers();
     };
     const { error } = await tryCatch(initPromise());
@@ -107,14 +106,8 @@ export class WebSocketManager implements IWebSocketManager {
    * Initialize required resources
    * @private
    */
-  private async initializeResources(): Promise<void> {
-    // const { error } = await tryCatch(init()); // Assuming init() is async
-    // if (error) {
-    //   console.error("Resource initialization error:", error);
-    //   // Continue execution as this is non-critical
-    // } else {
-    //   // console.warn("Resource loading complete"); // Changed to console.warn
-    // }
+  private initializeResources(): void {
+    // No-op: resource initialization is deferred to individual handlers.
   }
 
   /**
@@ -144,8 +137,7 @@ export class WebSocketManager implements IWebSocketManager {
       await this.dependencies.sessionSynchronizer.init();
 
       // Subscribe to code session updates
-      this.dependencies.sessionSynchronizer.subscribe((data: MessageData) => {
-        console.warn("Code session update:", data);
+      this.dependencies.sessionSynchronizer.subscribe((_session) => {
         // Additional live page specific handling can be added here
       });
 
@@ -199,32 +191,26 @@ export class WebSocketManager implements IWebSocketManager {
    * @private
    */
   private async handleDefaultPage(): Promise<void> {
-    const messageHandler = async (event: unknown): Promise<void> => {
-      const data = (event as MessageEvent).data;
+    const messageHandler = async (event: MessageEvent | Event): Promise<void> => {
+      if (!(event instanceof MessageEvent)) return;
       const { error } = await tryCatch(
-        this.dependencies.messageHandler.handleMessage(data),
+        this.dependencies.messageHandler.handleMessage(event.data),
       );
       if (error) {
         this.handleError(error);
-        // Decide if this should re-throw or just log.
-        // For now, re-throwing to maintain original behavior.
-        throw new MessageHandlingError("Failed to handle message", data);
+        throw new MessageHandlingError("Failed to handle message", event.data);
       }
     };
 
-    this.subscribe(
-      WebSocketEventType.MESSAGE,
-      messageHandler as (event: Event | MessageEvent<unknown>) => void,
-    );
+    this.subscribe(WebSocketEventType.MESSAGE, messageHandler);
 
     // Set up window message handler
-    window.onmessage = async (event: unknown): Promise<void> => {
+    window.onmessage = async (event: MessageEvent): Promise<void> => {
       const { error } = await tryCatch(
-        this.dependencies.messageHandler.handleMessage(event as Message),
+        this.dependencies.messageHandler.handleMessage(event.data as Message),
       );
       if (error) {
         this.handleError(error);
-        // Decide if this should re-throw or just log.
         throw new MessageHandlingError("Failed to handle window message", {
           event,
         });

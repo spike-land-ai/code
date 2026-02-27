@@ -6,15 +6,6 @@ import { tryCatch } from "@/lib/try-catch";
 import { Mutex } from "async-mutex";
 import { RpcProvider } from "worker-rpc";
 
-// Shared utilities and constants
-
-export const SHARED_CONSTANT = "shared-value";
-
-// Add shared utilities here
-export function sharedUtility() {
-  return "shared-functionality";
-}
-
 type WorkerPort = MessagePort | Worker;
 
 class WorkerWrapper {

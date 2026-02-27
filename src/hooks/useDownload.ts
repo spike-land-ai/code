@@ -5,17 +5,10 @@ const download = async (
   codeSpace: string,
   onlyReturn: boolean,
 ): Promise<string | void> => {
-  console.warn( // Changed to warn
-    `useDownload hook called with codeSpace: ${codeSpace}, onlyReturn: ${onlyReturn}`,
-  );
-  console.warn("Starting download process"); // Changed to warn
-
   const downloadProcess = async (): Promise<string | void> => {
     await getSpeedy2();
-    console.warn("getSpeedy2 completed"); // Changed to warn
 
     const url = `/live-cms/${codeSpace}.html`;
-    console.warn(`Fetching content from: ${url}`); // Changed to warn
     const response = await fetch(url);
 
     if (!response || !response.ok) {
@@ -23,14 +16,11 @@ const download = async (
     }
 
     const content = await response.text();
-    console.warn(`Content fetched, length: ${content.length} characters`); // Changed to warn
 
     if (onlyReturn) {
-      console.warn("Returning content without downloading"); // Changed to warn
       return content;
     }
 
-    console.warn("Creating Blob and initiating download"); // Changed to warn
     const blob = new Blob([content], { type: "text/html" });
     const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -40,9 +30,6 @@ const download = async (
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(blobUrl);
-
-    console.warn("Download process completed"); // Changed to warn
-    // Explicitly return void when not returning content
   };
 
   const { data, error } = await tryCatch<string | void>(downloadProcess());

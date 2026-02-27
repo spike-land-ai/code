@@ -323,9 +323,6 @@ export class CodeProcessor {
         </body>
         </html>`;
 
-      // If a `replaceIframe` callback is provided (e.g., by DraggableWindow),
-      // it's used to directly replace the preview iframe's DOM node. This allows
-      // for a more seamless update of the preview.
       if (replaceIframe) {
         const newIframe = document.createElement("iframe");
         newIframe.srcdoc = iframeSource;
@@ -333,12 +330,9 @@ export class CodeProcessor {
         newIframe.className = "w-full h-full border-0";
         replaceIframe(newIframe);
       } else {
-        // Fallback: If no `replaceIframe` callback is given, a hidden iframe is created
-        // and appended to the body. This might be for older implementations or specific
-        // use cases where direct DOM replacement isn't desired/possible.
+        // Fallback: create a hidden iframe for headless rendering (no visible preview).
         const iframe = document.createElement("iframe");
-        // this.currentIframe = iframe;
-        iframe.style.display = "none"; // Hidden as it's only for code execution and message passing
+        iframe.style.display = "none";
         document.body.appendChild(iframe);
         iframe.srcdoc = iframeSource;
       }
@@ -372,8 +366,6 @@ export class CodeProcessor {
           }
         };
 
-        // Store reference to the message handler so it can be removed later if needed (e.g., in cleanupPreviousRender)
-        // this.currentMessageHandler = messageHandler;
         window.addEventListener("message", messageHandler);
 
         // Timeout for the iframe rendering operation. If the iframe doesn't post back
@@ -430,24 +422,14 @@ export class CodeProcessor {
             raceError,
           );
         }
-        // If cleanupPreviousRender were active, it would be called here to remove the failed iframe/listener.
-        // this.cleanupPreviousRender();
         return false;
       }
 
-      // If rendering was successful and didn't timeout:
-      // If cleanupPreviousRender were active, it would be called here to clean up the successful render's iframe/listener
-      // if this instance of CodeProcessor is designed to only manage one render at a time.
-      // this.cleanupPreviousRender();
     } catch (error) {
-      // Catch any other errors that might occur during the try block (e.g., iframe creation issues).
-      // If cleanupPreviousRender were active, it would be called here.
-      // this.cleanupPreviousRender();
       console.error("Error running code in iframe (outer try-catch):", error);
-      return false; // Indicate failure
+      return false;
     }
-    // } // This was an extra closing brace from the original refactor attempt, removing it.
-    return true; // Indicates success
+    return true;
   }
 
   private async transpileCode(code: string): Promise<string> {

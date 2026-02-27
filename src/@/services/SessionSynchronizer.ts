@@ -160,7 +160,6 @@ export class SessionSynchronizer implements ISessionSynchronizer {
    * @param session - Session data to broadcast
    */
   broadcastSession(session: ICodeSession & { sender: string; }): void {
-    console.warn("Broadcasting session", session);
     try {
       if (!this.session) {
         this.session = sanitizeSession(session);

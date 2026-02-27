@@ -9,10 +9,6 @@ import { useErrorHandling } from "../hooks/useErrorHandling";
 import { EditorNode } from "./ErrorReminder";
 
 /**
- * EditorProps now includes setIframeSrc, which allows the editor/code processor
- * to update the draggable window's iframe after a successful render.
- */
-/**
  * EditorProps now includes replaceIframe, which allows the editor/code processor
  * to replace the draggable window's iframe DOM node after a successful render.
  */
@@ -34,6 +30,15 @@ export const Editor: React.FC<EditorProps> = (
   const [session, setSession] = useState<ICodeSession | null>(null);
   const [lastHash, setLastHash] = useState<string>("");
   const controller = useRef(new AbortController());
+
+  // Track aggregate metrics across component lifetime
+  const lifetimeMetrics = useRef({
+    startTime: Date.now(),
+    totalLocalChanges: 0,
+    totalExternalChanges: 0,
+    totalSkippedChanges: 0,
+    longestSyncTime: 0,
+  });
 
   // Initialize session with optimized state tracking
   useEffect(() => {
@@ -292,15 +297,6 @@ export const Editor: React.FC<EditorProps> = (
     handleContentChange,
     setEditorState,
   ]); // Added session and other relevant dependencies
-
-  // Track aggregate metrics across component lifetime
-  const lifetimeMetrics = useRef({
-    startTime: Date.now(),
-    totalLocalChanges: 0,
-    totalExternalChanges: 0,
-    totalSkippedChanges: 0,
-    longestSyncTime: 0,
-  });
 
   if (!session) return null;
 
